@@ -131,8 +131,50 @@
 		</ModelConditionEvent>	
 		<ModelConditionEvent Name="OnTurnRight1">
 			<Conditions>-TURN_RIGHT</Conditions>
-		</ModelConditionEvent>			
+		</ModelConditionEvent>	
 		
+		<!-- R21 harvester event handlers -->
+		<ModelConditionEvent Name="OnMoney1">
+			<Conditions>+MONEY_STORED_AMOUNT_1</Conditions>
+		</ModelConditionEvent>
+		
+		<ModelConditionEvent Name="OnMoney2">
+			<Conditions>+MONEY_STORED_AMOUNT_2</Conditions>
+		</ModelConditionEvent>
+			
+		<ModelConditionEvent Name="OnMoney3">
+			<Conditions>+MONEY_STORED_AMOUNT_3</Conditions>
+		</ModelConditionEvent>
+		
+		<ModelConditionEvent Name="OnMoney4">
+			<Conditions>+MONEY_STORED_AMOUNT_4</Conditions>
+		</ModelConditionEvent>
+		
+		<ModelConditionEvent  Name="OffMoney0">
+			<Conditions>-MONEY_STORED_AMOUNT_1</Conditions>
+		</ModelConditionEvent>	
+		
+		<ModelConditionEvent Name="OffMoney1">
+			<Conditions>-MONEY_STORED_AMOUNT_2</Conditions>
+		</ModelConditionEvent>
+		
+		<ModelConditionEvent Name="OffMoney2">
+			<Conditions>-MONEY_STORED_AMOUNT_3</Conditions>
+		</ModelConditionEvent>
+			
+		<ModelConditionEvent Name="OffMoney3">
+			<Conditions>-MONEY_STORED_AMOUNT_4</Conditions>
+		</ModelConditionEvent>
+	
+		<ModelConditionEvent  Name="OnHarvesting2">
+			<Conditions>+HARVEST_PREPARATION</Conditions>
+		</ModelConditionEvent>
+
+		<ModelConditionEvent  Name="OnHarvesting">
+			<Conditions>+HARVEST_ACTION</Conditions>
+		</ModelConditionEvent>
+
+					
 		<!-- ============== NEW MOBA EVENTS ============= -->				
 		<!-- Used for Ox auto-evac -->
 		<ModelConditionEvent Name="OnRapelling">
@@ -285,7 +327,7 @@
 		</ModelConditionEvent>				
 		<ModelConditionEvent Name="OnUser25">
 			<Conditions>+USER_25</Conditions>
-		</ModelConditionEvent>				
+		</ModelConditionEvent>		
 		<ModelConditionEvent Name="OnUser26">
 			<Conditions>+USER_26</Conditions>
 		</ModelConditionEvent>				
@@ -695,7 +737,39 @@
 
 	<EventList Name="MOBAErrorCheckerFunctions_103" Inherit="BaseScriptFunctions">  	
 		<EventHandler EventName="OnErrorChecker" ScriptFunctionName="OnErrorChecker_renwars" DebugSingleStep="false"/>
-	</EventList>		
+	</EventList>
+	
+	<EventList Name="AlienHarvesterFunctions_R21" Inherit="BaseScriptFunctions">	
+		<EventHandler EventName="OnHarvesting2"	ScriptFunctionName="OnHarvestingBlueScrin_R21" DebugSingleStep="false"/>			
+    </EventList>
+
+	<EventList Name="GDIHarvesterFunctions_R21" Inherit="BaseScriptFunctions">	
+	    <EventHandler EventName="OnMoney1"	ScriptFunctionName="OnMoney1_R21" DebugSingleStep="false"/>
+		<EventHandler EventName="OnMoney2"	ScriptFunctionName="OnMoney2_R21" DebugSingleStep="false"/>
+		<EventHandler EventName="OnMoney3"	ScriptFunctionName="OnMoney3_R21" DebugSingleStep="false"/>
+		<EventHandler EventName="OnMoney4"	ScriptFunctionName="OnMoney4_R21" DebugSingleStep="false"/>
+		<EventHandler EventName="OffMoney1"	ScriptFunctionName="OffMoney1_R21" DebugSingleStep="false"/>
+		<EventHandler EventName="OffMoney2"	ScriptFunctionName="OffMoney2_R21" DebugSingleStep="false"/>
+		<EventHandler EventName="OffMoney3"	ScriptFunctionName="OffMoney3_R21" DebugSingleStep="false"/>
+		<EventHandler EventName="OffMoney0"	ScriptFunctionName="OffMoney0_R21" DebugSingleStep="false"/>
+		<EventHandler EventName="OnHarvesting"	ScriptFunctionName="OnHarvestingBlue_R21" DebugSingleStep="false"/>	
+		<EventHandler EventName="OnCreated"	ScriptFunctionName="OnHarvesterCreated_R21" DebugSingleStep="false"/>
+		<EventHandler EventName="OnDestroyed"	ScriptFunctionName="OnHarvesterDeath_R21" DebugSingleStep="false"/>			
+    </EventList>
+	
+	<EventList Name="NodHarvesterFunctions_R21" Inherit="BaseScriptFunctions">	
+	    <EventHandler EventName="OnMoney1"	ScriptFunctionName="OnMoney1_R21" DebugSingleStep="false"/>
+		<EventHandler EventName="OnMoney2"	ScriptFunctionName="OnMoney2_R21" DebugSingleStep="false"/>
+		<EventHandler EventName="OnMoney3"	ScriptFunctionName="OnMoney3_R21" DebugSingleStep="false"/>
+		<EventHandler EventName="OnMoney4"	ScriptFunctionName="OnMoney4_R21" DebugSingleStep="false"/>
+		<EventHandler EventName="OffMoney1"	ScriptFunctionName="OffMoney1_R21" DebugSingleStep="false"/>
+		<EventHandler EventName="OffMoney2"	ScriptFunctionName="OffMoney2_R21" DebugSingleStep="false"/>
+		<EventHandler EventName="OffMoney3"	ScriptFunctionName="OffMoney3_R21" DebugSingleStep="false"/>
+		<EventHandler EventName="OffMoney0"	ScriptFunctionName="OffMoney0_R21" DebugSingleStep="false"/>
+		<EventHandler EventName="OnHarvesting2"	ScriptFunctionName="OnHarvestingBlueScrin_R21" DebugSingleStep="false"/>	
+		<EventHandler EventName="OnCreated"	ScriptFunctionName="OnHarvesterCreated_R21" DebugSingleStep="false"/>
+		<EventHandler EventName="OnDestroyed"	ScriptFunctionName="OnHarvesterDeath_R21" DebugSingleStep="false"/>			
+    </EventList>
 	
 	<EventList Name="GenericHarvesterFunctions_103" Inherit="BaseScriptFunctions">
         <EventHandler EventName="OnCreated"	ScriptFunctionName="OnHarvCreated_103" DebugSingleStep="false"/> 	
@@ -870,6 +944,12 @@
 		<EventHandler EventName="OnPowerRestore" ScriptFunctionName="onBuildingPowerRestored" DebugSingleStep="false"/>
 	</EventList>
 	
+	<!--<EventList Name="GDIRefineryFunctions" Inherit="BaseScriptFunctions">
+		<EventHandler EventName="OnCreated"	ScriptFunctionName="OnGDIRefineryCreated" DebugSingleStep="false"/>
+		<EventHandler EventName="OnPowerOutage" ScriptFunctionName="onBuildingPowerOutage" DebugSingleStep="false"/>
+		<EventHandler EventName="OnPowerRestore" ScriptFunctionName="onBuildingPowerRestored" DebugSingleStep="false"/>
+	</EventList> -->
+	
     <EventList Name="InfantryFunctions" Inherit="BaseScriptFunctions">
 		<!-- These are events that will apply to all infantry.  Any infantry units should inherit this set. jba -->
         <EventHandler EventName="BeAfraidOfRampage"			ScriptFunctionName="BecomeAfraidOfRampage"		DebugSingleStep="false"/>
@@ -1012,6 +1092,16 @@
 	<EventList Name="NodCyborgFunctions_103" Inherit="BaseScriptFunctions">
 	    <EventHandler EventName="OnCreated"	ScriptFunctionName="OnCyborgCreated_103" DebugSingleStep="false"/>
 	</EventList>  
+	
+	<EventList Name="NodCyborgFunctions_R21" Inherit="BaseScriptFunctions">
+	    <EventHandler EventName="OnCreated"	ScriptFunctionName="OnCyborgCreated_R21" DebugSingleStep="false"/>
+		<!--<EventHandler EventName="OnHealth100"	ScriptFunctionName="OnHeal_R21" DebugSingleStep="false"/> -->
+	</EventList>
+
+	<EventList Name="NodCyborgSquadFunctions_R21" Inherit="GenericSquadFunctions_103">
+	    <EventHandler EventName="OnCreated"	ScriptFunctionName="OnCyborgSquadCreated_R21" DebugSingleStep="false"/>
+		<!--<EventHandler EventName="OnHealth100"	ScriptFunctionName="OnHeal_R21" DebugSingleStep="false"/> -->
+	</EventList>  	
 
 	<EventList Name="NodCyborgSquadFunctions_103" Inherit="GenericSquadFunctions_103">
 	    <EventHandler EventName="OnCreated"	ScriptFunctionName="OnCyborgSquadCreated_103" DebugSingleStep="false"/>

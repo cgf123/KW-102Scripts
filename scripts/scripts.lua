@@ -46,6 +46,15 @@ mobadetectionhackstatus = {} -- tracks detection hack enabled for player
 mobaregenpods = {} -- tracks regen pod count
 mobaenergypods = {} -- tracks energy pod count
 
+harvbluetib = {} -- for counting blue tiberium in harvester
+harvgreentib = {} -- for counting green tiberium harvester
+
+-- 1 is green tiberium 0 is for blue 
+bar1 = {} -- for tracking the bar one of the harvester.
+bar2 = {} -- for tracking the bar two of the harvester.
+bar3 = {} -- for tracking the bar three of the harvester.
+bar4 = {} -- for tracking the bar four of the harvester.
+
 mobatest = {}
 mobaspawnrego = {}
 
@@ -109,6 +118,10 @@ function OnGDIPowerPlantCreated(self)
 	ObjectHideSubObjectPermanently( self, "TurbineGlows", true )
 end
 
+--function OnGDIRefineryCreated(self)
+--	ObjectHideSubObjectPermanently( self, "BAR_01", true )
+--end
+
 function OnGDICommandPostCreated(self)
 	ObjectHideSubObjectPermanently( self, "UG_StealthDetector", true )
 	ObjectHideSubObjectPermanently( self, "UG_StealthDetector01", true )
@@ -147,6 +160,168 @@ function OnSteelTalonsMammothCreated(self)
 	ObjectHideSubObjectPermanently( self, "MuzzleFlash_01", true )
 	ObjectHideSubObjectPermanently( self, "MuzzleFlash_02", true )
 end
+
+-- Start of R21 Functions --
+
+function OnCyborgSquadCreated_R21(self)
+	ExecuteAction("NAMED_SET_SPECIAL_POWER_COUNTDOWN", self, "EMPBlastGetInRange", 2.5);
+end
+
+function OnCyborgCreated_R21(self)
+	ObjectHideSubObjectPermanently( self, "WEAPON_PARTICLEBM", true )
+	ExecuteAction("NAMED_SET_SPECIAL_POWER_COUNTDOWN", self, "EMPBlast", 2.5);
+end	
+
+function OnHarvesterCreated_R21(self)
+	local a = getObjectId(self)
+	harvbluetib[a] = 0
+	harvgreentib[a] = 0
+end
+
+function OnHarvestingBlueScrin_R21(self)
+	if ObjectHasUpgrade(self, "Upgrade_UpgradeBlueTib") == 0 and ObjectTestModelCondition(self, "USER_25") == true then
+		ObjectGrantUpgrade(self, "Upgrade_UpgradeBlueTib")
+	   elseif 
+		ObjectHasUpgrade(self, "Upgrade_UpgradeBlueTib") and ObjectTestModelCondition(self, "USER_25") == false then
+		ObjectRemoveUpgrade(self, "Upgrade_UpgradeBlueTib") 
+	end
+end
+
+function OnHarvestingBlue_R21(self)
+	if ObjectHasUpgrade(self, "Upgrade_UpgradeBlueTib") == 0 and ObjectTestModelCondition(self, "USER_25") == true then
+		ObjectGrantUpgrade(self, "Upgrade_UpgradeBlueTib")
+	   elseif 
+		ObjectHasUpgrade(self, "Upgrade_UpgradeBlueTib") and ObjectTestModelCondition(self, "USER_24") == true then
+		ObjectRemoveUpgrade(self, "Upgrade_UpgradeBlueTib") 
+	end
+end
+
+function OffMoney0_R21(self) 
+	local a = getObjectId(self)		
+	if ObjectTestModelCondition(self, "DOCKING") then 
+		ObjectRemoveUpgrade(self, "Upgrade_UpgradeBlueOne")	
+		ObjectRemoveUpgrade(self, "Upgrade_UpgradeGreenOne")
+			if bar1[a] == 0 then harvbluetib[a] = harvbluetib[a] - 1
+				elseif bar1[a] == 1 then harvgreentib[a] = harvgreentib[a] - 1
+			end
+	end
+end
+
+function OffMoney1_R21(self)
+	local a = getObjectId(self)
+	if ObjectTestModelCondition(self, "DOCKING") then 
+		ObjectRemoveUpgrade(self, "Upgrade_UpgradeBlueTwo")	
+		ObjectRemoveUpgrade(self, "Upgrade_UpgradeGreenTwo") 
+			if bar2[a] == 0 then harvbluetib[a] = harvbluetib[a] - 1
+				elseif bar2[a] == 1 then harvgreentib[a] = harvgreentib[a] - 1
+			end
+	end
+end
+
+function OffMoney2_R21(self)
+	local a = getObjectId(self)
+	if ObjectTestModelCondition(self, "DOCKING") then 
+		ObjectRemoveUpgrade(self, "Upgrade_UpgradeBlueThree")	
+		ObjectRemoveUpgrade(self, "Upgrade_UpgradeGreenThree") 
+		if bar3[a] == 0 then harvbluetib[a] = harvbluetib[a] - 1
+				elseif bar3[a] == 1 then harvgreentib[a] = harvgreentib[a] - 1
+			end
+	end
+end
+
+function OffMoney3_R21(self)
+	local a = getObjectId(self)
+	if ObjectTestModelCondition(self, "DOCKING") then 
+		ObjectRemoveUpgrade(self, "Upgrade_UpgradeBlueFour")	
+		ObjectRemoveUpgrade(self, "Upgrade_UpgradeGreenFour") 
+		if bar4[a] == 0 then harvbluetib[a] = harvbluetib[a] - 1
+				elseif bar4[a] == 1 then harvgreentib[a] = harvgreentib[a] - 1
+			end
+	end
+end
+
+function OnMoney1_R21(self)
+	local a = getObjectId(self)
+	if ObjectTestModelCondition(self, "DOCKING") == false then
+		if ObjectTestModelCondition(self, "USER_25") then 
+			ObjectGrantUpgrade(self, "Upgrade_UpgradeBlueOne")
+			harvbluetib[a] = harvbluetib[a] + 1
+			bar1[a] = 0
+		elseif ObjectTestModelCondition(self, "USER_24") then
+			ObjectGrantUpgrade(self, "Upgrade_UpgradeGreenOne")
+			harvgreentib[a] = harvgreentib[a] + 1
+			bar1[a] = 1			
+		end
+	end
+end
+
+function OnMoney2_R21(self)
+	local a = getObjectId(self)
+	if ObjectTestModelCondition(self, "DOCKING") == false then
+		if ObjectTestModelCondition(self, "USER_25") then 
+			ObjectGrantUpgrade(self, "Upgrade_UpgradeBlueTwo")
+			harvbluetib[a] = harvbluetib[a] + 1
+			bar2[a] = 0
+		elseif ObjectTestModelCondition(self, "USER_24") then
+			ObjectGrantUpgrade(self, "Upgrade_UpgradeGreenTwo")
+			harvgreentib[a] = harvgreentib[a] + 1 
+			bar2[a] = 1
+		end
+	end
+end
+
+function OnMoney3_R21(self)
+	local a = getObjectId(self)
+	if ObjectTestModelCondition(self, "DOCKING") == false then
+		if ObjectTestModelCondition(self, "USER_25") then 
+			ObjectGrantUpgrade(self, "Upgrade_UpgradeBlueThree")
+			harvbluetib[a] = harvbluetib[a] + 1
+			bar3[a] = 0
+		elseif ObjectTestModelCondition(self, "USER_24") then
+			ObjectGrantUpgrade(self, "Upgrade_UpgradeGreenThree")
+			harvgreentib[a] = harvgreentib[a] + 1 
+			bar3[a] = 1
+		end
+	end
+end
+
+function OnMoney4_R21(self)
+	local a = getObjectId(self)
+	if ObjectTestModelCondition(self, "DOCKING") == false then
+		if ObjectTestModelCondition(self, "USER_25") then 
+			ObjectGrantUpgrade(self, "Upgrade_UpgradeBlueFour")
+			harvbluetib[a] = harvbluetib[a] + 1
+			bar4[a] = 0
+		elseif ObjectTestModelCondition(self, "USER_24") then
+			ObjectGrantUpgrade(self, "Upgrade_UpgradeGreenFour")	
+			harvgreentib[a] = harvgreentib[a] + 1 
+			bar4[a] = 1
+		end
+	end
+end
+
+function OnHarvesterDeath_R21(self)
+	local a = getObjectId(self)
+	if harvbluetib[a] >= 2 then
+		harvbluetib[a] = nil
+		harvgreentib[a] = nil
+		bar1[a] = nil
+		bar2[a] = nil
+		bar3[a] = nil 
+		bar4[a] = nil	
+		ObjectCreateAndFireTempWeapon(self, "DeployBlueTiberium")
+	elseif harvbluetib[a] == 1 or harvgreentib[a] > 0 then
+		harvbluetib[a] = nil
+		harvgreentib[a] = nil
+		bar1[a] = nil
+		bar2[a] = nil
+		bar3[a] = nil 
+		bar4[a] = nil	
+		ObjectCreateAndFireTempWeapon(self, "DeployGreenTiberium")
+	end
+end
+
+-- End of R21 Functions --
 
 -- ################ NEW FUNCTIONS FOR 1.03 HARV BUG DETECTION #######################
 function OnHarvCreated_103(self)
